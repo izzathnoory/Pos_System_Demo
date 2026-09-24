@@ -133,6 +133,9 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
           if (item.id === 'm-3' || item.name === 'Butter Garlic Crab') {
             return { ...item, image: '/images/butter_garlic_crab.jpg' };
           }
+          if (item.id === 'm-4' || item.name === 'Ocean Chef Mixed Seafood Fried Rice') {
+            return { ...item, name: 'Mixed Seafood Fried Rice' };
+          }
           if (item.id === 'm-5' || item.name === 'Devilled Calamari Rings') {
             return { ...item, image: '/images/devilled_calamari_rings.jpg' };
           }

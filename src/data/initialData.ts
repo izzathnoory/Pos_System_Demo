@@ -64,7 +64,7 @@ export const initialMenuItems: MenuItem[] = [
   {
     id: 'm-4',
     code: 'MC01',
-    name: 'Ocean Chef Mixed Seafood Fried Rice',
+    name: 'Mixed Seafood Fried Rice',
     categoryId: 'cat-2',
     categoryName: 'Main Courses',
     price: 2400,
