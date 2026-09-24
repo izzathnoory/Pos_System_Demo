@@ -130,6 +130,21 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
           if (item.id === 'm-2' || item.name === 'Spicy Jumbo Prawn Curry') {
             return { ...item, image: '/images/spicy_jumbo_prawn_curry.jpg' };
           }
+          if (item.id === 'm-3' || item.name === 'Butter Garlic Crab') {
+            return { ...item, image: '/images/butter_garlic_crab.jpg' };
+          }
+          if (item.id === 'm-5' || item.name === 'Devilled Calamari Rings') {
+            return { ...item, image: '/images/devilled_calamari_rings.jpg' };
+          }
+          if (item.id === 'm-6' || item.name === 'Crispy Fish Cutlets (5 pcs)') {
+            return { ...item, image: '/images/crispy_fish_cutlets.jpg' };
+          }
+          if (item.id === 'm-7' || item.name === 'Ocean Cream of Crab Soup') {
+            return { ...item, image: '/images/ocean_cream_crab_soup.jpg' };
+          }
+          if (item.id === 'm-8' || item.name === 'Tropical Mango Pudding') {
+            return { ...item, image: '/images/tropical_mango_pudding.jpg' };
+          }
           return item;
         });
       } catch {
@@ -182,11 +197,15 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
           parsed.bannerTitle = 'Welcome to POS System By Nexzoa';
         }
         if (parsed.slides && Array.isArray(parsed.slides)) {
-          parsed.slides = parsed.slides.map((s: any) =>
-            s.id === 's1' || (s.title && s.title.includes('Lobster'))
-              ? { ...s, image: '/images/grilled_lobster.jpg' }
-              : s
-          );
+          parsed.slides = parsed.slides.map((s: any) => {
+            if (s.id === 's1' || (s.title && s.title.includes('Lobster'))) {
+              return { ...s, image: '/images/grilled_lobster.jpg' };
+            }
+            if (s.id === 's2' || (s.title && s.title.includes('Crab'))) {
+              return { ...s, image: '/images/butter_garlic_crab.jpg' };
+            }
+            return s;
+          });
         }
         return parsed;
       } catch {
