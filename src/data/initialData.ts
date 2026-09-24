@@ -30,7 +30,7 @@ export const initialMenuItems: MenuItem[] = [
     categoryName: 'Seafood Specials',
     price: 4800,
     description: 'Fresh Sri Lankan rock lobster grilled with garlic butter herb glaze & steamed veggies',
-    image: 'https://images.unsplash.com/photo-1553240799-36bbf332a5c3?auto=format&fit=crop&w=600&q=80',
+    image: '/images/grilled_lobster.jpg',
     isAvailable: true,
     preparationTimeMinutes: 25,
     isPopular: true,
@@ -231,7 +231,7 @@ export const initialDisplaySettings: CustomerDisplaySettings = {
   bannerTitle: 'Welcome to POS System By Nexzoa',
   bannerSubtitle: 'Experience Smart Dining & Quick Service POS',
   slides: [
-    { id: 's1', title: 'Signature Grilled Ocean Lobster', image: 'https://images.unsplash.com/photo-1553240799-36bbf332a5c3?auto=format&fit=crop&w=1000&q=80', tag: 'Chef Special' },
+    { id: 's1', title: 'Signature Grilled Ocean Lobster', image: '/images/grilled_lobster.jpg', tag: 'Chef Special' },
     { id: 's2', title: 'Authentic Butter Garlic Lagoon Crab', image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=1000&q=80', tag: 'Must Try' },
     { id: 's3', title: 'Ocean Blue Lagoon Refreshing Mocktail', image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1000&q=80', tag: 'Beverage Delight' },
   ],

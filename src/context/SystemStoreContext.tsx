@@ -120,7 +120,20 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
     const saved = localStorage.getItem('oceanchef_menu');
-    return saved ? JSON.parse(saved) : initialMenuItems;
+    if (saved) {
+      try {
+        const parsed: MenuItem[] = JSON.parse(saved);
+        return parsed.map((item) => {
+          if (item.id === 'm-1' || item.name === 'Grilled Ocean Lobster') {
+            return { ...item, image: '/images/grilled_lobster.jpg' };
+          }
+          return item;
+        });
+      } catch {
+        return initialMenuItems;
+      }
+    }
+    return initialMenuItems;
   });
 
   // Clean up legacy order and table localStorage keys on startup so placed orders only persist until browser refresh
@@ -164,6 +177,13 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
         const parsed = JSON.parse(saved);
         if (parsed.bannerTitle && parsed.bannerTitle.includes('Ocean Chef')) {
           parsed.bannerTitle = 'Welcome to POS System By Nexzoa';
+        }
+        if (parsed.slides && Array.isArray(parsed.slides)) {
+          parsed.slides = parsed.slides.map((s: any) =>
+            s.id === 's1' || (s.title && s.title.includes('Lobster'))
+              ? { ...s, image: '/images/grilled_lobster.jpg' }
+              : s
+          );
         }
         return parsed;
       } catch {
