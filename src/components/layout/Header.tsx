@@ -55,21 +55,22 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
   const currentTitle = pageTitles[location.pathname] || 'POS System By Nexzoa';
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between z-20 shrink-0 shadow-xs">
-      <div className="flex items-center gap-4">
+    <header className="h-16 bg-white border-b border-slate-200/80 px-3 sm:px-6 flex items-center justify-between z-20 shrink-0 shadow-xs">
+      <div className="flex items-center gap-2 sm:gap-4 min-w-0">
         <button
           onClick={onToggleMobileSidebar}
-          className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+          className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 shrink-0"
+          aria-label="Open Navigation Menu"
         >
           <MenuIcon className="w-5 h-5" />
         </button>
-        <div>
-          <h1 className="text-lg font-bold text-slate-800 tracking-tight">{currentTitle}</h1>
-          <p className="text-xs text-slate-400 font-medium">POS System By Nexzoa</p>
+        <div className="min-w-0">
+          <h1 className="text-sm sm:text-lg font-bold text-slate-800 tracking-tight truncate">{currentTitle}</h1>
+          <p className="text-[10px] sm:text-xs text-slate-400 font-medium truncate">POS System By Nexzoa</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
         {/* Auto Clock */}
         <div className="hidden sm:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">
           <Clock className="w-3.5 h-3.5 text-[#0B4EAE]" />

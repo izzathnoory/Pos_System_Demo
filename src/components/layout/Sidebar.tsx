@@ -21,14 +21,16 @@ import {
   ChevronLeft,
   ChevronRight,
   Waves,
+  X,
 } from 'lucide-react';
 
 interface SidebarProps {
   isCollapsed: boolean;
   onToggleCollapse: () => void;
+  onClose?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse, onClose }) => {
   const { user, logout } = useAuth();
 
   const navItems = [
@@ -73,13 +75,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse 
               </div>
             )}
           </div>
-          <button
-            onClick={onToggleCollapse}
-            className="hidden md:flex p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
-            title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-          >
-            {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          </button>
+          <div className="flex items-center gap-1">
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="md:hidden p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                title="Close Sidebar"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+            <button
+              onClick={onToggleCollapse}
+              className="hidden md:flex p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+              title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+            >
+              {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
 
         {/* Navigation List */}
@@ -90,6 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse 
               <NavLink
                 key={item.path}
                 to={item.path}
+                onClick={() => onClose?.()}
                 className={({ isActive }) =>
                   `flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl font-medium text-xs transition-all duration-150 ${
                     isActive

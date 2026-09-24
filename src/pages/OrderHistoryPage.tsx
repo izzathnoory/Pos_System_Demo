@@ -22,9 +22,9 @@ export const OrderHistoryPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header & Search */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Historical Order Invoices ({orders.length})</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Historical Order Invoices ({orders.length})</h2>
           <p className="text-xs text-slate-500">Complete audit log of all dine-in and take-away transactions</p>
         </div>
 
@@ -50,7 +50,7 @@ export const OrderHistoryPage: React.FC = () => {
       {/* Orders Table */}
       <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left">
+          <table className="w-full min-w-[700px] text-xs text-left">
             <thead className="bg-slate-50/80 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
                 <th className="p-4">Order Number</th>

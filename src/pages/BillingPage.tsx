@@ -49,23 +49,23 @@ export const BillingPage: React.FC = () => {
   const activeBillingOrders = orders.filter((o) => o.paymentStatus === 'Unpaid');
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6">
       {/* Header Selector Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Billing & Invoice Preparation</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Billing & Invoice Preparation</h2>
           <p className="text-xs text-slate-500">Combine mini-orders, apply discounts & generate final invoice</p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold text-slate-600">Select Unpaid Order:</label>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
+          <label className="text-xs font-semibold text-slate-600 shrink-0">Select Unpaid Order:</label>
           <select
             value={selectedOrder?.id || ''}
             onChange={(e) => {
               const found = orders.find((o) => o.id === e.target.value);
               if (found) setSelectedOrder(found);
             }}
-            className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800"
+            className="w-full sm:w-auto rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800"
           >
             {activeBillingOrders.map((o) => (
               <option key={o.id} value={o.id}>
@@ -77,9 +77,9 @@ export const BillingPage: React.FC = () => {
       </div>
 
       {selectedOrder ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left 2 Cols: Itemized Mini-Orders List */}
-          <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-5">
+          <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <span className="text-xs font-mono font-bold text-indigo-900 bg-indigo-50 px-2 py-0.5 rounded">
@@ -93,23 +93,24 @@ export const BillingPage: React.FC = () => {
             </div>
 
             {/* Mini Orders Breakdown Table */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {selectedOrder.miniOrders.map((mo) => (
-                <div key={mo.id} className="border border-slate-200 rounded-xl p-4 space-y-2 bg-slate-50/40">
+                <div key={mo.id} className="border border-slate-200 rounded-xl p-3 sm:p-4 space-y-2 bg-slate-50/40">
                   <div className="flex justify-between text-xs font-bold text-slate-700">
                     <span>Mini-Order {mo.id} ({mo.items.length} Items)</span>
                     <span className="text-slate-500">{new Date(mo.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
 
-                  <table className="w-full text-xs text-left">
-                    <thead>
-                      <tr className="text-slate-400 border-b border-slate-200">
-                        <th className="py-1">Dish Name</th>
-                        <th className="py-1 text-center">Qty</th>
-                        <th className="py-1 text-right">Unit Price</th>
-                        <th className="py-1 text-right">Total</th>
-                      </tr>
-                    </thead>
+                  <div className="overflow-x-auto -mx-1 px-1">
+                    <table className="w-full min-w-[280px] text-xs text-left">
+                      <thead>
+                        <tr className="text-slate-400 border-b border-slate-200">
+                          <th className="py-1">Dish Name</th>
+                          <th className="py-1 text-center">Qty</th>
+                          <th className="py-1 text-right">Unit Price</th>
+                          <th className="py-1 text-right">Total</th>
+                        </tr>
+                      </thead>
                     <tbody>
                       {mo.items.map((item) => (
                         <tr key={item.id} className="border-b border-slate-100">
@@ -124,8 +125,9 @@ export const BillingPage: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
 
             {/* Customer Details Attachment */}
             <div className="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -147,7 +149,7 @@ export const BillingPage: React.FC = () => {
           </div>
 
           {/* Right Column: Billing Summary & Discounts */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between space-y-6">
+          <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs flex flex-col justify-between space-y-4 sm:space-y-6">
             <div className="space-y-5">
               <h3 className="font-bold text-slate-800 text-base border-b border-slate-100 pb-3">
                 Invoice Breakdown

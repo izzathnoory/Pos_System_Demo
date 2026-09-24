@@ -12,7 +12,7 @@ interface ReceiptPrintProps {
 
 export const ReceiptPrint: React.FC<ReceiptPrintProps> = ({ data }) => {
   return (
-    <div className="font-mono text-xs leading-tight max-w-sm mx-auto p-5 border border-slate-300 rounded bg-white text-black">
+    <div className="font-mono text-xs leading-tight w-full max-w-sm mx-auto p-3.5 sm:p-5 border border-slate-300 rounded bg-white text-black">
       <div className="text-center border-b border-dashed border-slate-400 pb-3 mb-3">
         <h1 className="font-bold text-lg">POS SYSTEM BY NEXZOA</h1>
         <p className="text-[10px]">No. 42 Marine Drive, Colombo 03</p>

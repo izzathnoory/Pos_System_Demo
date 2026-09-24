@@ -22,31 +22,31 @@ export const CustomerDisplayPage: React.FC = () => {
   const currentSlide = displaySettings.slides[activeSlideIndex] || displaySettings.slides[0];
 
   return (
-    <div className="h-screen w-screen bg-[#0A192F] text-white flex flex-col justify-between p-8 overflow-hidden select-none">
+    <div className="min-h-screen w-full bg-[#0A192F] text-white flex flex-col justify-between p-4 sm:p-6 md:p-8 overflow-y-auto lg:overflow-hidden select-none">
       {/* Top Banner */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-[#0B4EAE] rounded-2xl">
-            <Waves className="w-8 h-8 text-cyan-400" />
+      <div className="flex flex-wrap items-center justify-between border-b border-slate-800 pb-4 gap-3">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="p-2.5 sm:p-3 bg-[#0B4EAE] rounded-2xl">
+            <Waves className="w-6 h-6 sm:w-8 h-8 text-cyan-400" />
           </div>
           <div>
-            <h1 className="text-2xl font-black tracking-wider text-white">
+            <h1 className="text-xl sm:text-2xl font-black tracking-wider text-white">
               {displaySettings.bannerTitle}
             </h1>
-            <p className="text-xs text-cyan-400 font-semibold">{displaySettings.bannerSubtitle}</p>
+            <p className="text-[11px] sm:text-xs text-cyan-400 font-semibold">{displaySettings.bannerSubtitle}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-800 px-4 py-2 rounded-xl border border-slate-700 text-xs font-bold text-cyan-300">
+        <div className="flex items-center gap-2 bg-slate-800 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border border-slate-700 text-xs font-bold text-cyan-300">
           <Sparkles className="w-4 h-4" />
           <span>Customer Live Display</span>
         </div>
       </div>
 
       {/* Main Grid: Left Promotional Banner, Right Live Cart */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1 py-6 overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 flex-1 py-4 sm:py-6 overflow-hidden">
         {/* Left Column: Promo Slideshow */}
-        <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-700 flex flex-col justify-end p-8 bg-slate-900">
+        <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-700 flex flex-col justify-end p-6 sm:p-8 bg-slate-900 min-h-[260px] sm:min-h-[320px] lg:min-h-auto">
           <img
             src={currentSlide?.image}
             alt={currentSlide?.title}
@@ -58,7 +58,7 @@ export const CustomerDisplayPage: React.FC = () => {
             <span className="bg-[#0B4EAE] text-white font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">
               {currentSlide?.tag}
             </span>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               {currentSlide?.title}
             </h2>
           </div>

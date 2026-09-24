@@ -103,8 +103,8 @@ export const MenuManagementPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Action Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
           <Input
             placeholder="Search dish by name or code..."
             value={searchQuery}
@@ -112,7 +112,7 @@ export const MenuManagementPage: React.FC = () => {
             icon={<Search className="w-4 h-4" />}
             className="w-full sm:w-72"
           />
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 -mx-1 px-1">
             <button
               onClick={() => setSelectedCategory('All')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
@@ -139,13 +139,18 @@ export const MenuManagementPage: React.FC = () => {
           </div>
         </div>
 
-        <Button variant="primary" icon={<Plus className="w-4 h-4" />} onClick={() => handleOpenDrawer()}>
+        <Button
+          variant="primary"
+          icon={<Plus className="w-4 h-4" />}
+          onClick={() => handleOpenDrawer()}
+          className="w-full sm:w-auto"
+        >
           Add New Dish
         </Button>
       </div>
 
       {/* Menu Item Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
         {filteredItems.map((item) => (
           <div
             key={item.id}

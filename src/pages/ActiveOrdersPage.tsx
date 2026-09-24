@@ -20,18 +20,18 @@ export const ActiveOrdersPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Active Kitchen & Dining Queue</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Active Kitchen & Dining Queue</h2>
           <p className="text-xs text-slate-500">Live order status tracker across all tables & take-away counter</p>
         </div>
-        <span className="bg-[#0B4EAE] text-white text-xs font-bold px-3 py-1.5 rounded-full">
+        <span className="bg-[#0B4EAE] text-white text-xs font-bold px-3 py-1.5 rounded-full shrink-0">
           {activeOrders.length} Active Orders
         </span>
       </div>
 
       {activeOrders.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 sm:p-12 text-center space-y-3">
           <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
             <ClipboardList className="w-6 h-6" />
           </div>
@@ -46,7 +46,7 @@ export const ActiveOrdersPage: React.FC = () => {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {activeOrders.map((order) => {
             const validMiniOrders = order.miniOrders.filter((mo) =>
               mo.items.some((item) => item.status !== 'Cancelled')

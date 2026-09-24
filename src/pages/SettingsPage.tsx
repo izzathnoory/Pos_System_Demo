@@ -35,17 +35,17 @@ export const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+    <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Hotel System Preferences</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Hotel System Preferences</h2>
           <p className="text-xs text-slate-500">Configure global tax rules, branding, currency & hardware preferences</p>
         </div>
       </div>
 
-      <form onSubmit={handleSave} className="space-y-6">
+      <form onSubmit={handleSave} className="space-y-4 sm:space-y-6">
         {/* Hotel Profile Section */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs space-y-4">
           <h3 className="font-bold text-slate-800 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
             <Building className="w-5 h-5 text-[#0B4EAE]" />
             <span>Hotel Profile & Contact Info</span>
@@ -82,7 +82,7 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         {/* Financial Rates Section */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs space-y-4">
           <h3 className="font-bold text-slate-800 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
             <Percent className="w-5 h-5 text-[#0B4EAE]" />
             <span>Financial Rates & Currency</span>
@@ -110,7 +110,7 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         {/* Receipt & Printing Section */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs space-y-4">
           <h3 className="font-bold text-slate-800 text-base border-b border-slate-100 pb-3 flex items-center gap-2">
             <FileText className="w-5 h-5 text-[#0B4EAE]" />
             <span>Receipt & Printing Options</span>

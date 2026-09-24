@@ -17,30 +17,35 @@ export const QRCodeManagementPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Table QR Stand Generator</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Table QR Stand Generator</h2>
           <p className="text-xs text-slate-500">Generate and print customer QR menu standees for dining tables</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
           <Select
             value={selectedTableId}
             onChange={(e) => setSelectedTableId(e.target.value)}
             options={tables.map((t) => ({ label: `${t.tableNumber} (${t.location})`, value: t.id }))}
-            className="w-56"
+            className="w-full sm:w-56"
           />
-          <Button variant="primary" icon={<Printer className="w-4 h-4" />} onClick={handlePrintQR}>
+          <Button
+            variant="primary"
+            icon={<Printer className="w-4 h-4" />}
+            onClick={handlePrintQR}
+            className="w-full sm:w-auto"
+          >
             Print QR Stand
           </Button>
         </div>
       </div>
 
       {/* QR Stand Preview Card */}
-      <div className="flex justify-center">
+      <div className="flex justify-center px-2 sm:px-0">
         <div
           id="printable-area"
-          className="w-full max-w-sm bg-white rounded-3xl border-2 border-slate-800 p-8 shadow-2xl text-center space-y-6 animate-fade-in"
+          className="w-full max-w-sm bg-white rounded-3xl border-2 border-slate-800 p-5 sm:p-8 shadow-2xl text-center space-y-5 sm:space-y-6 animate-fade-in"
         >
           {/* Header Brand */}
           <div className="flex flex-col items-center">

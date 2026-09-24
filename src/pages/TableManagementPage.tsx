@@ -190,17 +190,18 @@ export const TableManagementPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Controls Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="text-base font-bold text-slate-800">Dining Floor Management</h2>
+          <h2 className="text-base sm:text-lg font-bold text-slate-800">Dining Floor Management</h2>
           <p className="text-xs text-slate-500 font-medium">Manage restaurant tables, reservations, and seating</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto flex-wrap">
           <Button
             variant="primary"
             icon={<Plus className="w-4 h-4" />}
             onClick={handleOpenAddTableModal}
+            className="flex-1 sm:flex-none"
           >
             Add New Table
           </Button>
@@ -208,6 +209,7 @@ export const TableManagementPage: React.FC = () => {
             variant="outline"
             icon={<Merge className="w-4 h-4" />}
             onClick={() => setIsMergeModalOpen(true)}
+            className="flex-1 sm:flex-none"
           >
             Merge Tables
           </Button>
@@ -215,7 +217,7 @@ export const TableManagementPage: React.FC = () => {
       </div>
 
       {/* Legend & Stats Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 flex items-center justify-between">
           <span className="text-xs font-semibold text-emerald-800">Free Tables</span>
           <span className="text-lg font-bold text-emerald-800">
@@ -561,7 +563,7 @@ export const TableManagementPage: React.FC = () => {
 
                 {/* Interactive Time Picker Popover */}
                 {isTimePickerOpen && (
-                  <div className="absolute top-full right-0 w-80 mt-2 z-40 bg-white rounded-2xl border border-slate-300 shadow-2xl p-4 space-y-3 animate-fade-in">
+                  <div className="absolute top-full right-0 left-auto max-w-[calc(100vw-36px)] sm:max-w-none w-72 sm:w-80 mt-2 z-40 bg-white rounded-2xl border border-slate-300 shadow-2xl p-3 sm:p-4 space-y-2.5 sm:space-y-3 animate-fade-in">
                     <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                       <span className="text-xs font-bold text-slate-800 flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5 text-[#0B4EAE]" /> Choose Hour & Minute

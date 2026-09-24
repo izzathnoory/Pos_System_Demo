@@ -22,9 +22,9 @@ export const CustomerDisplayManagementPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Customer 2-Way Display Configuration</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Customer 2-Way Display Configuration</h2>
           <p className="text-xs text-slate-500">Configure promotional slides, headers and messaging for customer pole displays</p>
         </div>
 
@@ -32,14 +32,14 @@ export const CustomerDisplayManagementPage: React.FC = () => {
           href="/customer-display"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 bg-[#0B4EAE] hover:bg-[#093D89] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all"
+          className="w-full sm:w-auto justify-center flex items-center gap-2 bg-[#0B4EAE] hover:bg-[#093D89] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all"
         >
           <ExternalLink className="w-4 h-4" />
           <span>Launch 2-Way Display Screen</span>
         </a>
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-5">
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
         <h3 className="font-bold text-slate-800 text-base border-b border-slate-100 pb-3">
           Display Header & Message Banner
         </h3>
@@ -73,7 +73,7 @@ export const CustomerDisplayManagementPage: React.FC = () => {
       </div>
 
       {/* Slide Preview Grid */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-xs space-y-4">
         <h3 className="font-bold text-slate-800 text-base border-b border-slate-100 pb-3">
           Promotional Slides ({displaySettings.slides.length})
         </h3>

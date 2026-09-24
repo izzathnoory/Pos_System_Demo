@@ -20,9 +20,9 @@ export const BackupSecurityPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Database Backup & Security Audit</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Database Backup & Security Audit</h2>
           <p className="text-xs text-slate-500">System backup archives, export data dumps & security logs</p>
         </div>
 
@@ -30,6 +30,7 @@ export const BackupSecurityPage: React.FC = () => {
           variant="primary"
           icon={<HardDrive className="w-4 h-4" />}
           onClick={createManualBackup}
+          className="w-full sm:w-auto"
         >
           Create Manual Backup
         </Button>
@@ -40,7 +41,7 @@ export const BackupSecurityPage: React.FC = () => {
           Backup History Log ({backupLogs.length})
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left">
+          <table className="w-full min-w-[560px] text-xs text-left">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
                 <th className="p-4">Timestamp</th>

@@ -71,21 +71,26 @@ export const InventoryPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Raw Ingredient & Stock Inventory</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Raw Ingredient & Stock Inventory</h2>
           <p className="text-xs text-slate-500">Monitor ingredient levels, reorder thresholds & supplier linkages</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
           <Input
             placeholder="Search stock..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             icon={<Search className="w-4 h-4" />}
-            className="w-64"
+            className="w-full sm:w-64"
           />
-          <Button variant="primary" icon={<Plus className="w-4 h-4" />} onClick={handleOpenDrawer}>
+          <Button
+            variant="primary"
+            icon={<Plus className="w-4 h-4" />}
+            onClick={handleOpenDrawer}
+            className="w-full sm:w-auto"
+          >
             Add Ingredient
           </Button>
         </div>
@@ -94,7 +99,7 @@ export const InventoryPage: React.FC = () => {
       {/* Inventory Table */}
       <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left">
+          <table className="w-full min-w-[680px] text-xs text-left">
             <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
               <tr>
                 <th className="p-4">Ingredient Name</th>

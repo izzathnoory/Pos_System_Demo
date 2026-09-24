@@ -34,13 +34,13 @@ export const ReportsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Controls Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
         <div>
-          <h2 className="font-bold text-slate-800 text-lg">Financial & Sales Analytics</h2>
+          <h2 className="font-bold text-slate-800 text-base sm:text-lg">Financial & Sales Analytics</h2>
           <p className="text-xs text-slate-500">Executive performance metrics, dish popularity & revenue insights</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto flex-wrap">
           <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
             {(['Today', 'Week', 'Month'] as const).map((r) => (
               <button
@@ -62,7 +62,7 @@ export const ReportsPage: React.FC = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         <StatCard
           title="Total Gross Revenue"
           value={`LKR ${totalRevenue.toLocaleString()}`}

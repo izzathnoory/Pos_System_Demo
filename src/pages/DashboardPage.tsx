@@ -91,22 +91,22 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Quick POS Actions Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="font-bold text-slate-800 text-base">Quick POS Terminal Controls</h3>
+          <h3 className="font-bold text-slate-800 text-sm sm:text-base">Quick POS Terminal Controls</h3>
           <p className="text-xs text-slate-500">Initiate new orders or process instant billing</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <Link to="/tables">
-            <Button variant="primary" icon={<PlusCircle className="w-4 h-4" />}>
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+          <Link to="/tables" className="w-full sm:w-auto">
+            <Button variant="primary" icon={<PlusCircle className="w-4 h-4" />} className="w-full sm:w-auto">
               New Dine-In Order
             </Button>
           </Link>
-          <Button variant="secondary" icon={<ShoppingBag className="w-4 h-4" />} onClick={handleStartTakeAway}>
+          <Button variant="secondary" icon={<ShoppingBag className="w-4 h-4" />} onClick={handleStartTakeAway} className="w-full sm:w-auto">
             New Take-Away Order
           </Button>
-          <Link to="/billing">
-            <Button variant="outline" icon={<Receipt className="w-4 h-4" />}>
+          <Link to="/billing" className="w-full sm:w-auto">
+            <Button variant="outline" icon={<Receipt className="w-4 h-4" />} className="w-full sm:w-auto">
               Go to Billing
             </Button>
           </Link>
@@ -116,10 +116,10 @@ export const DashboardPage: React.FC = () => {
       {/* Grid Layout: Tables Overview & Recent Active Orders */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Live Table Status Grid (2 Cols span) */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-bold text-slate-800 text-base">Live Dining Table Layout</h3>
+              <h3 className="font-bold text-slate-800 text-sm sm:text-base">Live Dining Table Layout</h3>
               <p className="text-xs text-slate-500">Click occupied tables to view active order</p>
             </div>
             <Link to="/tables" className="text-xs font-semibold text-[#0B4EAE] hover:underline flex items-center gap-1">
@@ -128,7 +128,7 @@ export const DashboardPage: React.FC = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {tables.map((table) => (
               <div
                 key={table.id}

@@ -20,13 +20,17 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
 
       {/* Mobile Drawer Sidebar */}
       {isMobileSidebarOpen && (
-        <div className="fixed inset-0 z-50 flex md:hidden">
+        <div className="fixed inset-0 z-50 flex md:hidden animate-fade-in">
           <div
-            className="fixed inset-0 bg-slate-900/60"
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
             onClick={() => setIsMobileSidebarOpen(false)}
           />
-          <div className="relative flex-1 max-w-xs w-full bg-[#0A192F] h-full z-10">
-            <Sidebar isCollapsed={false} onToggleCollapse={() => setIsMobileSidebarOpen(false)} />
+          <div className="relative flex-1 max-w-xs w-full bg-[#0A192F] h-full z-10 shadow-2xl flex flex-col">
+            <Sidebar
+              isCollapsed={false}
+              onToggleCollapse={() => setIsMobileSidebarOpen(false)}
+              onClose={() => setIsMobileSidebarOpen(false)}
+            />
           </div>
         </div>
       )}
@@ -34,8 +38,8 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
         <Header onToggleMobileSidebar={() => setIsMobileSidebarOpen(true)} />
-        <main className="flex-1 overflow-y-auto p-6 bg-slate-50/70">
-          <div className="max-w-7xl mx-auto space-y-6">{children}</div>
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-slate-50/70">
+          <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">{children}</div>
         </main>
       </div>
 

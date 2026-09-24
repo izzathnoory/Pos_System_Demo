@@ -38,12 +38,12 @@ export const CustomerQRMenuPage: React.FC = () => {
     <CustomerLayout>
       <div className="space-y-6">
         {/* Ocean Hero Banner */}
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#0A192F] to-[#0B4EAE] text-white p-6 sm:p-8 shadow-xl">
-          <div className="relative z-10 max-w-xl space-y-3">
-            <span className="bg-cyan-400/20 text-cyan-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-cyan-400/30">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#0A192F] to-[#0B4EAE] text-white p-5 sm:p-8 shadow-xl">
+          <div className="relative z-10 max-w-xl space-y-2 sm:space-y-3">
+            <span className="bg-cyan-400/20 text-cyan-300 text-[10px] sm:text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full uppercase tracking-wider border border-cyan-400/30">
               Welcome to POS System By Nexzoa
             </span>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+            <h1 className="text-xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
               Fresh Seafood & Authentic Sri Lankan Cuisine
             </h1>
             <p className="text-xs sm:text-sm text-slate-300">
@@ -54,7 +54,7 @@ export const CustomerQRMenuPage: React.FC = () => {
         </div>
 
         {/* Search & Category Filter Bar */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3 sticky top-18 z-20">
+        <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3 sticky top-14 sm:top-16 z-20">
           <Input
             placeholder="Search our ocean menu..."
             value={searchQuery}
@@ -132,12 +132,11 @@ export const CustomerQRMenuPage: React.FC = () => {
         </div>
 
         {/* Floating Rate Us Button */}
-        <div className="fixed bottom-6 right-6 z-30">
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-30">
           <Button
             variant="primary"
-            size="lg"
-            className="rounded-full shadow-2xl bg-[#0B4EAE] hover:bg-[#093D89]"
-            icon={<MessageSquare className="w-5 h-5" />}
+            className="rounded-full shadow-2xl bg-[#0B4EAE] hover:bg-[#093D89] text-xs sm:text-sm px-4 py-2.5 sm:px-5 sm:py-3"
+            icon={<MessageSquare className="w-4 h-4 sm:w-5 h-5" />}
             onClick={() => setIsFeedbackModalOpen(true)}
           >
             Leave Dining Feedback
