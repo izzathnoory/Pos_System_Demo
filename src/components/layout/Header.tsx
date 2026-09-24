@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
     '/backup': 'Database Backup & System Security',
   };
 
-  const currentTitle = pageTitles[location.pathname] || 'Ocean Chef POS';
+  const currentTitle = pageTitles[location.pathname] || 'POS System By Nexzoa';
 
   return (
     <header className="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between z-20 shrink-0 shadow-xs">
@@ -65,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleMobileSidebar }) => {
         </button>
         <div>
           <h1 className="text-lg font-bold text-slate-800 tracking-tight">{currentTitle}</h1>
-          <p className="text-xs text-slate-400 font-medium">Ocean Chef Hotel & Restaurant POS System</p>
+          <p className="text-xs text-slate-400 font-medium">POS System By Nexzoa</p>
         </div>
       </div>
 

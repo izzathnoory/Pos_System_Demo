@@ -274,33 +274,33 @@ export const initialFeedbacks: CustomerFeedback[] = [
 ];
 
 export const initialDisplaySettings: CustomerDisplaySettings = {
-  bannerTitle: 'Welcome to Ocean Chef Hotel & Restaurant',
-  bannerSubtitle: 'Experience Colombo\'s Finest Ocean Delicacies & Fresh Catch',
+  bannerTitle: 'Welcome to POS System By Nexzoa',
+  bannerSubtitle: 'Experience Smart Dining & Quick Service POS',
   slides: [
     { id: 's1', title: 'Signature Grilled Ocean Lobster', image: 'https://images.unsplash.com/photo-1553240799-36bbf332a5c3?auto=format&fit=crop&w=1000&q=80', tag: 'Chef Special' },
     { id: 's2', title: 'Authentic Butter Garlic Lagoon Crab', image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=1000&q=80', tag: 'Must Try' },
     { id: 's3', title: 'Ocean Blue Lagoon Refreshing Mocktail', image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1000&q=80', tag: 'Beverage Delight' },
   ],
-  thankYouMessage: 'Thank you for dining with Ocean Chef! Please come again soon.',
+  thankYouMessage: 'Thank you for dining with us! Please come again soon.',
   showQRForPayment: true,
 };
 
 export const initialSettings: SystemSettings = {
-  hotelName: 'Ocean Chef Hotel & Restaurant',
-  tagline: 'Fresh Seafood & Luxury Dining',
+  hotelName: 'POS System By Nexzoa',
+  tagline: 'Smart Restaurant & Retail POS Management',
   address: 'No. 42 Marine Drive, Colombo 03, Sri Lanka',
   phone: '+94 11 234 5678',
-  email: 'info@oceanchef.lk',
+  email: 'info@nexzoa.com',
   currency: 'LKR',
   taxRate: 10,
   serviceChargeRate: 5,
-  receiptFooter: 'Thank you for visiting Ocean Chef Hotel! Tax Invoice included.',
+  receiptFooter: 'Thank you for choosing POS System By Nexzoa! Tax Invoice included.',
   enableAutoPrintKitchen: true,
   enableCustomerDisplay: true,
 };
 
 export const initialBackupLogs: BackupLog[] = [
-  { id: 'b-1', timestamp: '2026-08-18 00:00:00', filename: 'oceanchef_backup_20260818.json', size: '2.4 MB', status: 'Success', type: 'Auto' },
-  { id: 'b-2', timestamp: '2026-08-17 00:00:00', filename: 'oceanchef_backup_20260817.json', size: '2.3 MB', status: 'Success', type: 'Auto' },
-  { id: 'b-3', timestamp: '2026-08-16 14:30:12', filename: 'oceanchef_manual_backup.json', size: '2.2 MB', status: 'Success', type: 'Manual' },
+  { id: 'b-1', timestamp: '2026-08-18 00:00:00', filename: 'nexzoa_pos_backup_20260818.json', size: '2.4 MB', status: 'Success', type: 'Auto' },
+  { id: 'b-2', timestamp: '2026-08-17 00:00:00', filename: 'nexzoa_pos_backup_20260817.json', size: '2.3 MB', status: 'Success', type: 'Auto' },
+  { id: 'b-3', timestamp: '2026-08-16 14:30:12', filename: 'nexzoa_pos_manual_backup.json', size: '2.2 MB', status: 'Success', type: 'Manual' },
 ];

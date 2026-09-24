@@ -14,10 +14,10 @@ export const CustomerLayout: React.FC<{ children: React.ReactNode }> = ({ childr
             </div>
             <div>
               <h1 className="font-bold text-base tracking-wide text-white leading-tight">
-                OCEAN CHEF HOTEL
+                POS SYSTEM BY NEXZOA
               </h1>
               <p className="text-[10px] text-cyan-400 font-semibold uppercase tracking-wider">
-                Fresh Seafood & Luxury Dining
+                Restaurant & Hotel POS
               </p>
             </div>
           </div>

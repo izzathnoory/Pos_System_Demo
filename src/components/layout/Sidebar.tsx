@@ -65,10 +65,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse 
             {!isCollapsed && (
               <div className="flex flex-col">
                 <span className="font-bold text-white tracking-wide text-base leading-tight">
-                  OCEAN CHEF
+                  POS SYSTEM
                 </span>
                 <span className="text-[10px] text-cyan-400 font-semibold tracking-wider uppercase">
-                  Hotel System
+                  By Nexzoa
                 </span>
               </div>
             )}

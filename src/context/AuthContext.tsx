@@ -12,28 +12,37 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const MOCK_USER: User = {
   id: 'u-admin',
-  username: 'admin',
-  name: 'Chef Manager (Admin)',
+  username: 'Admin',
+  name: 'Admin Manager',
   role: 'admin',
   avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=200&q=80',
 };
 
+const AUTH_STORAGE_KEY = 'nexzoa_pos_auth';
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('oceanchef_auth');
-    return saved ? JSON.parse(saved) : MOCK_USER; // Default logged in as admin for demo convenience
+    try {
+      localStorage.removeItem('oceanchef_auth'); // Clear legacy auto-login
+      const saved = localStorage.getItem(AUTH_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : null; // Starts as null so system always starts on Login page
+    } catch {
+      return null;
+    }
   });
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('oceanchef_auth', JSON.stringify(user));
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
     } else {
-      localStorage.removeItem('oceanchef_auth');
+      localStorage.removeItem(AUTH_STORAGE_KEY);
     }
   }, [user]);
 
   const login = (username: string, password: string): boolean => {
-    if (username === 'admin' && password === 'admin123') {
+    const trimmedUser = (username || '').trim();
+    const trimmedPass = (password || '').trim();
+    if (trimmedUser.toLowerCase() === 'admin' && trimmedPass === 'admin@123') {
       setUser(MOCK_USER);
       return true;
     }
@@ -58,3 +67,4 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
+

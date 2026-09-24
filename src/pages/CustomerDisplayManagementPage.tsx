@@ -49,21 +49,21 @@ export const CustomerDisplayManagementPage: React.FC = () => {
             label="Banner Header Title"
             value={bannerTitle}
             onChange={(e) => setBannerTitle(e.target.value)}
-            placeholder="e.g. Welcome to Ocean Chef Hotel"
+            placeholder="e.g. Welcome to POS System By Nexzoa"
           />
 
           <Input
             label="Banner Subtitle / Tagline"
             value={bannerSubtitle}
             onChange={(e) => setBannerSubtitle(e.target.value)}
-            placeholder="e.g. Experience Colombo's Finest Ocean Delicacies"
+            placeholder="e.g. Experience Smart Dining & Quick Service POS"
           />
 
           <Input
             label="Thank You Footer Message"
             value={thankYouMessage}
             onChange={(e) => setThankYouMessage(e.target.value)}
-            placeholder="e.g. Thank you for dining with Ocean Chef! Please come again."
+            placeholder="e.g. Thank you for dining with us! Please come again."
           />
 
           <Button variant="primary" icon={<Save className="w-4 h-4" />} type="submit">

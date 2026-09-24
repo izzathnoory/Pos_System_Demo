@@ -149,12 +149,34 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const [displaySettings, setDisplaySettings] = useState<CustomerDisplaySettings>(() => {
     const saved = localStorage.getItem('oceanchef_display_settings');
-    return saved ? JSON.parse(saved) : initialDisplaySettings;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.bannerTitle && parsed.bannerTitle.includes('Ocean Chef')) {
+          parsed.bannerTitle = 'Welcome to POS System By Nexzoa';
+        }
+        return parsed;
+      } catch {
+        return initialDisplaySettings;
+      }
+    }
+    return initialDisplaySettings;
   });
 
   const [settings, setSettings] = useState<SystemSettings>(() => {
     const saved = localStorage.getItem('oceanchef_settings');
-    return saved ? JSON.parse(saved) : initialSettings;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.hotelName && parsed.hotelName.includes('Ocean Chef')) {
+          parsed.hotelName = 'POS System By Nexzoa';
+        }
+        return parsed;
+      } catch {
+        return initialSettings;
+      }
+    }
+    return initialSettings;
   });
 
   const [backupLogs, setBackupLogs] = useState<BackupLog[]>(() => {
@@ -730,7 +752,7 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const newLog: BackupLog = {
       id: `b-${Date.now()}`,
       timestamp: new Date().toLocaleString(),
-      filename: `oceanchef_manual_backup_${Date.now()}.json`,
+      filename: `pos_nexzoa_backup_${Date.now()}.json`,
       size: '2.5 MB',
       status: 'Success',
       type: 'Manual',

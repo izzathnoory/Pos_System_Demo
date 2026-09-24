@@ -16,7 +16,7 @@ export const KitchenTicketPrint: React.FC<KitchenTicketProps> = ({ data }) => {
     <div className="font-mono text-sm leading-tight max-w-xs mx-auto p-4 border border-slate-300 rounded bg-white text-black">
       <div className="text-center border-b border-dashed border-slate-400 pb-2 mb-2">
         <h2 className="font-bold text-lg">KITCHEN TICKET</h2>
-        <p className="text-xs">OCEAN CHEF HOTEL</p>
+        <p className="text-xs">POS SYSTEM BY NEXZOA</p>
       </div>
 
       <div className="flex justify-between text-xs mb-2">

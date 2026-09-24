@@ -47,9 +47,9 @@ export const QRCodeManagementPage: React.FC = () => {
             <div className="p-3 bg-[#0A192F] text-cyan-400 rounded-2xl mb-2">
               <Waves className="w-8 h-8" />
             </div>
-            <h1 className="text-xl font-black text-slate-900 tracking-wider">OCEAN CHEF</h1>
+            <h1 className="text-xl font-black text-slate-900 tracking-wider">POS SYSTEM</h1>
             <p className="text-[10px] text-cyan-600 font-bold uppercase tracking-widest">
-              Hotel & Restaurant
+              By Nexzoa
             </p>
           </div>
 

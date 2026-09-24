@@ -14,7 +14,7 @@ export const ReceiptPrint: React.FC<ReceiptPrintProps> = ({ data }) => {
   return (
     <div className="font-mono text-xs leading-tight max-w-sm mx-auto p-5 border border-slate-300 rounded bg-white text-black">
       <div className="text-center border-b border-dashed border-slate-400 pb-3 mb-3">
-        <h1 className="font-bold text-lg">OCEAN CHEF HOTEL</h1>
+        <h1 className="font-bold text-lg">POS SYSTEM BY NEXZOA</h1>
         <p className="text-[10px]">No. 42 Marine Drive, Colombo 03</p>
         <p className="text-[10px]">Tel: +94 11 234 5678</p>
         <h2 className="font-bold text-xs mt-2 uppercase">Official Tax Receipt</h2>
@@ -74,8 +74,8 @@ export const ReceiptPrint: React.FC<ReceiptPrintProps> = ({ data }) => {
       )}
 
       <div className="text-center text-[10px] border-t border-dashed border-slate-400 pt-3">
-        <p>Thank you for dining with Ocean Chef!</p>
-        <p className="text-[9px] text-slate-500 mt-1">Software Powered by Ocean Chef POS v1.0</p>
+        <p>Thank you for choosing POS System By Nexzoa!</p>
+        <p className="text-[9px] text-slate-500 mt-1">Software Powered by POS System By Nexzoa</p>
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ export const CustomerQRMenuPage: React.FC = () => {
         <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#0A192F] to-[#0B4EAE] text-white p-6 sm:p-8 shadow-xl">
           <div className="relative z-10 max-w-xl space-y-3">
             <span className="bg-cyan-400/20 text-cyan-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-cyan-400/30">
-              Welcome to Ocean Chef
+              Welcome to POS System By Nexzoa
             </span>
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
               Fresh Seafood & Authentic Sri Lankan Cuisine
@@ -148,7 +148,7 @@ export const CustomerQRMenuPage: React.FC = () => {
         <Modal
           isOpen={isFeedbackModalOpen}
           onClose={() => setIsFeedbackModalOpen(false)}
-          title="Rate Your Ocean Chef Dining Experience"
+          title="Rate Your Dining Experience"
           footer={
             <div className="flex gap-3 justify-end">
               <Button variant="outline" onClick={() => setIsFeedbackModalOpen(false)}>

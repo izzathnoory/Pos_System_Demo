@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
-import { Waves, Lock, User as UserIcon, ShieldAlert } from 'lucide-react';
+import { Lock, User as UserIcon, ShieldAlert, Sparkles } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState<string>('admin');
-  const [password, setPassword] = useState<string>('admin123');
+  const [username, setUsername] = useState<string>('Admin');
+  const [password, setPassword] = useState<string>('admin@123');
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,9 +31,9 @@ export const LoginPage: React.FC = () => {
       if (success) {
         navigate('/');
       } else {
-        setError('Invalid credentials! Use username: admin, password: admin123');
+        setError('Invalid credentials! Please use username: Admin and password: admin@123');
       }
-    }, 600);
+    }, 400);
   };
 
   return (
@@ -40,10 +46,11 @@ export const LoginPage: React.FC = () => {
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center mb-8">
           <div className="p-4 bg-gradient-to-tr from-[#0B4EAE] to-[#00D2FF] text-white rounded-2xl shadow-lg mb-3">
-            <Waves className="w-10 h-10" />
+            <Sparkles className="w-10 h-10" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-800 tracking-tight">OCEAN CHEF</h1>
-          <p className="text-xs text-slate-500 font-medium">Hotel & Restaurant Management System</p>
+          <h1 className="text-2xl font-black text-slate-800 tracking-tight">Restaurant POS System</h1>
+          <p className="text-xs text-cyan-600 font-bold uppercase tracking-widest mt-0.5">By Nexzoa</p>
+          <p className="text-xs text-slate-500 font-medium mt-1">POS System By Nexzoa</p>
         </div>
 
         {error && (
@@ -60,7 +67,7 @@ export const LoginPage: React.FC = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             icon={<UserIcon className="w-4 h-4" />}
-            placeholder="Enter username"
+            placeholder="Enter username (Admin)"
             required
           />
 
@@ -70,14 +77,22 @@ export const LoginPage: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             icon={<Lock className="w-4 h-4" />}
-            placeholder="Enter password"
+            placeholder="Enter password (admin@123)"
             required
           />
 
-          <div className="p-3 bg-slate-100 rounded-xl text-xs text-slate-600 space-y-1">
-            <p className="font-semibold text-slate-700">Demo Login Credentials:</p>
-            <p>Username: <code className="bg-white px-1.5 py-0.5 rounded text-indigo-600 font-mono">admin</code></p>
-            <p>Password: <code className="bg-white px-1.5 py-0.5 rounded text-indigo-600 font-mono">admin123</code></p>
+          <div className="p-3 bg-slate-100 rounded-xl text-xs text-slate-600 space-y-1.5 border border-slate-200">
+            <p className="font-semibold text-slate-700 flex items-center gap-1.5">
+              <span>Demo Login Credentials:</span>
+            </p>
+            <div className="flex items-center justify-between">
+              <span>Username:</span>
+              <code className="bg-white px-2 py-0.5 rounded text-[#0B4EAE] font-mono font-bold border border-slate-200">Admin</code>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>Password:</span>
+              <code className="bg-white px-2 py-0.5 rounded text-[#0B4EAE] font-mono font-bold border border-slate-200">admin@123</code>
+            </div>
           </div>
 
           <Button
@@ -87,14 +102,15 @@ export const LoginPage: React.FC = () => {
             className="w-full mt-2 bg-[#0B4EAE] hover:bg-[#093D89]"
             isLoading={isLoading}
           >
-            Sign In to Terminal
+            Sign In to Dashboard
           </Button>
         </form>
 
         <div className="mt-8 pt-4 border-t border-slate-200/80 text-center text-xs text-slate-400">
-          Ocean Chef Hotel System © 2026 • Single Admin Portal
+          POS System By Nexzoa © 2026 • Terminal Portal
         </div>
       </div>
     </div>
   );
 };
+
