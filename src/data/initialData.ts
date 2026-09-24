@@ -43,7 +43,7 @@ export const initialMenuItems: MenuItem[] = [
     categoryName: 'Seafood Specials',
     price: 3200,
     description: 'Jumbo prawns simmered in rich coconut gravy with traditional roasted spices',
-    image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80',
+    image: '/images/spicy_jumbo_prawn_curry.jpg',
     isAvailable: true,
     preparationTimeMinutes: 20,
     isPopular: true,

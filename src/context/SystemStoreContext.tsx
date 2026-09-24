@@ -127,6 +127,9 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
           if (item.id === 'm-1' || item.name === 'Grilled Ocean Lobster') {
             return { ...item, image: '/images/grilled_lobster.jpg' };
           }
+          if (item.id === 'm-2' || item.name === 'Spicy Jumbo Prawn Curry') {
+            return { ...item, image: '/images/spicy_jumbo_prawn_curry.jpg' };
+          }
           return item;
         });
       } catch {
