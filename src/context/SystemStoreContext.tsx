@@ -433,7 +433,6 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
       updateTableStatus(tableId, 'Occupied', newOrder.id);
     }
 
-    addToast(`New ${type} order created (${newOrder.orderNumber})`, 'success');
     return newOrder;
   };
 
@@ -496,8 +495,6 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
         return calculateOrderTotals(updatedOrder);
       })
     );
-
-    addToast('Items added to order!', 'info');
   };
 
   const addDishDirectlyToOrder = (orderId: string, dish: MenuItem) => {
