@@ -5,6 +5,7 @@ import type {
   Table,
   Order,
   MiniOrder,
+  OrderItem,
   InventoryItem,
   Supplier,
   Customer,
@@ -77,6 +78,11 @@ interface SystemStoreType {
   // Orders & POS
   createOrder: (type: 'Dine-In' | 'Take-Away', tableId?: string, customerName?: string, customerPhone?: string) => Order;
   addItemsToOrder: (orderId: string, items: { menuItem: MenuItem; quantity: number; notes?: string }[]) => void;
+  addDishDirectlyToOrder: (orderId: string, dish: MenuItem) => void;
+  updateItemQuantity: (orderId: string, itemId: string, delta: number) => void;
+  removeItemFromOrder: (orderId: string, itemId: string) => void;
+  updateOrderItemNotes: (orderId: string, itemId: string, notes: string) => void;
+  clearOrder: (orderId: string) => void;
   cancelOrderItem: (orderId: string, miniOrderId: string, itemId: string) => void;
   sendMiniOrderToKitchen: (orderId: string, miniOrderId: string) => void;
   updateOrderDiscountsAndTaxes: (orderId: string, discountPercentage: number, taxPercentage?: number, serviceChargePercentage?: number) => void;
@@ -117,36 +123,19 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
     return saved ? JSON.parse(saved) : initialMenuItems;
   });
 
-  const [tables, setTables] = useState<Table[]>(() => {
-    const saved = localStorage.getItem('oceanchef_tables');
-    if (saved) {
-      try {
-        const parsed: Table[] = JSON.parse(saved);
-        return parsed.map((t) => {
-          if (t.currentOrderId === 'ord-101' || (t.id === 't-3' && t.currentOrderId === 'ord-101')) {
-            return { ...t, status: 'Free' as const, currentOrderId: undefined, guestCount: undefined };
-          }
-          return t;
-        });
-      } catch {
-        return initialTables;
-      }
-    }
-    return initialTables;
-  });
+  // Clean up legacy order and table localStorage keys on startup so placed orders only persist until browser refresh
+  try {
+    localStorage.removeItem('oceanchef_orders');
+    localStorage.removeItem('oceanchef_tables');
+    localStorage.removeItem('nexzoa_pos_orders');
+    localStorage.removeItem('nexzoa_pos_tables');
+  } catch {
+    // ignore
+  }
 
-  const [orders, setOrders] = useState<Order[]>(() => {
-    const saved = localStorage.getItem('oceanchef_orders');
-    if (saved) {
-      try {
-        const parsed: Order[] = JSON.parse(saved);
-        return parsed.filter((o) => o.id !== 'ord-101');
-      } catch {
-        return initialOrders;
-      }
-    }
-    return initialOrders;
-  });
+  // Tables & Orders stored in-memory during session; refreshed when browser reloads
+  const [tables, setTables] = useState<Table[]>(initialTables);
+  const [orders, setOrders] = useState<Order[]>(initialOrders);
 
   const [inventory, setInventory] = useState<InventoryItem[]>(() => {
     const saved = localStorage.getItem('oceanchef_inventory');
@@ -208,11 +197,9 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [printData, setPrintData] = useState<{ type: 'kitchen' | 'receipt' | 'qr'; data: any } | null>(null);
 
-  // Persistence
+  // Persistence (Categories, Menu, Inventory, Settings persist, while Orders/Tables stay until browser refresh)
   useEffect(() => { localStorage.setItem('oceanchef_categories', JSON.stringify(categories)); }, [categories]);
   useEffect(() => { localStorage.setItem('oceanchef_menu', JSON.stringify(menuItems)); }, [menuItems]);
-  useEffect(() => { localStorage.setItem('oceanchef_tables', JSON.stringify(tables)); }, [tables]);
-  useEffect(() => { localStorage.setItem('oceanchef_orders', JSON.stringify(orders)); }, [orders]);
   useEffect(() => { localStorage.setItem('oceanchef_inventory', JSON.stringify(inventory)); }, [inventory]);
   useEffect(() => { localStorage.setItem('oceanchef_suppliers', JSON.stringify(suppliers)); }, [suppliers]);
   useEffect(() => { localStorage.setItem('oceanchef_customers', JSON.stringify(customers)); }, [customers]);
@@ -510,7 +497,137 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
       })
     );
 
-    addToast('Items added to draft order!', 'info');
+    addToast('Items added to order!', 'info');
+  };
+
+  const addDishDirectlyToOrder = (orderId: string, dish: MenuItem) => {
+    setOrders((prev) =>
+      prev.map((order) => {
+        if (order.id !== orderId) return order;
+
+        let miniOrders = [...order.miniOrders];
+        if (miniOrders.length === 0) {
+          miniOrders = [
+            {
+              id: '#1001',
+              orderId,
+              miniOrderNumber: 1,
+              createdAt: new Date().toISOString(),
+              isSentToKitchen: false,
+              status: 'Draft',
+              items: [],
+            },
+          ];
+        }
+
+        const targetMiniOrder = { ...miniOrders[0] };
+        const existingItemIndex = targetMiniOrder.items.findIndex(
+          (i) => i.menuItemId === dish.id && i.status !== 'Cancelled'
+        );
+
+        let updatedItems = [...targetMiniOrder.items];
+        if (existingItemIndex > -1) {
+          updatedItems[existingItemIndex] = {
+            ...updatedItems[existingItemIndex],
+            quantity: updatedItems[existingItemIndex].quantity + 1,
+          };
+        } else {
+          updatedItems.push({
+            id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+            menuItemId: dish.id,
+            name: dish.name,
+            price: dish.price,
+            quantity: 1,
+            status: 'Pending',
+          });
+        }
+
+        targetMiniOrder.items = updatedItems;
+        miniOrders[0] = targetMiniOrder;
+
+        return calculateOrderTotals({
+          ...order,
+          miniOrders,
+        });
+      })
+    );
+  };
+
+  const updateItemQuantity = (orderId: string, itemId: string, delta: number) => {
+    setOrders((prev) =>
+      prev.map((order) => {
+        if (order.id !== orderId) return order;
+
+        const updatedMiniOrders = order.miniOrders
+          .map((mo) => {
+            const updatedItems = mo.items
+              .map((item) => {
+                if (item.id === itemId) {
+                  const newQty = item.quantity + delta;
+                  return newQty > 0 ? { ...item, quantity: newQty } : null;
+                }
+                return item;
+              })
+              .filter(Boolean) as OrderItem[];
+
+            return {
+              ...mo,
+              items: updatedItems,
+            };
+          })
+          .filter((mo) => mo.items.length > 0);
+
+        return calculateOrderTotals({
+          ...order,
+          miniOrders: updatedMiniOrders,
+        });
+      })
+    );
+  };
+
+  const removeItemFromOrder = (orderId: string, itemId: string) => {
+    setOrders((prev) =>
+      prev.map((order) => {
+        if (order.id !== orderId) return order;
+
+        const updatedMiniOrders = order.miniOrders
+          .map((mo) => ({
+            ...mo,
+            items: mo.items.filter((i) => i.id !== itemId),
+          }))
+          .filter((mo) => mo.items.length > 0);
+
+        return calculateOrderTotals({
+          ...order,
+          miniOrders: updatedMiniOrders,
+        });
+      })
+    );
+  };
+
+  const updateOrderItemNotes = (orderId: string, itemId: string, notes: string) => {
+    setOrders((prev) =>
+      prev.map((order) => {
+        if (order.id !== orderId) return order;
+        const updatedMiniOrders = order.miniOrders.map((mo) => ({
+          ...mo,
+          items: mo.items.map((i) => (i.id === itemId ? { ...i, specialNotes: notes } : i)),
+        }));
+        return { ...order, miniOrders: updatedMiniOrders };
+      })
+    );
+  };
+
+  const clearOrder = (orderId: string) => {
+    setOrders((prev) =>
+      prev.map((order) => {
+        if (order.id !== orderId) return order;
+        return calculateOrderTotals({
+          ...order,
+          miniOrders: [],
+        });
+      })
+    );
   };
 
   const cancelOrderItem = (orderId: string, miniOrderId: string, itemId: string) => {
@@ -817,6 +934,11 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
         unmergeTable,
         createOrder,
         addItemsToOrder,
+        addDishDirectlyToOrder,
+        updateItemQuantity,
+        removeItemFromOrder,
+        updateOrderItemNotes,
+        clearOrder,
         cancelOrderItem,
         sendMiniOrderToKitchen,
         updateOrderDiscountsAndTaxes,
