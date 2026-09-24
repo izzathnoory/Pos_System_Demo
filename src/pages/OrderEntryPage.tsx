@@ -15,9 +15,9 @@ import {
   CheckCircle2,
   Check,
   Receipt,
-  RotateCcw,
   X,
   AlertTriangle,
+  ShoppingBag,
 } from 'lucide-react';
 
 export const OrderEntryPage: React.FC = () => {
@@ -70,14 +70,9 @@ export const OrderEntryPage: React.FC = () => {
         const newOrder = createOrder('Dine-In', queryTableId);
         setSelectedOrderId(newOrder.id);
       }
-    } else if (!selectedOrderId && orders.length > 0) {
-      const activeDineIn = orders.find((o) => o.status === 'Active' && o.type === 'Dine-In');
-      if (activeDineIn) {
-        setSelectedOrderId(activeDineIn.id);
-        setOrderType('Dine-In');
-      } else {
-        setOrderType('Dine-In');
-      }
+    } else {
+      // Don't auto-load previous orders! Keep cart empty on clean entry
+      setSelectedOrderId(null);
     }
   }, [queryOrderId, queryTableId]);
 
@@ -127,10 +122,20 @@ export const OrderEntryPage: React.FC = () => {
   };
 
   const handleAddDishToDraft = (dish: MenuItem) => {
-    if (orderType === 'Dine-In' && (!currentOrder || !currentOrder.tableId)) {
-      setTableWarning(true);
-      addToast('Please select a table first before adding items to order!', 'warning');
-      return;
+    let activeOrd = currentOrder;
+
+    // If no order/table is currently selected, pick an available table or create take-away
+    if (!activeOrd) {
+      if (orderType === 'Dine-In') {
+        const freeTable = tables.find((t) => t.status === 'Free') || tables[0];
+        if (freeTable) {
+          activeOrd = createOrder('Dine-In', freeTable.id);
+          setSelectedOrderId(activeOrd.id);
+        }
+      } else {
+        activeOrd = createOrder('Take-Away');
+        setSelectedOrderId(activeOrd.id);
+      }
     }
 
     setTableWarning(false);
@@ -392,186 +397,269 @@ export const OrderEntryPage: React.FC = () => {
       </div>
 
       {/* Right Column: Live Order Cart & Mini-Orders Ticket Drawer */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between overflow-hidden">
-        <div className="flex-1 overflow-y-auto space-y-4 pr-1">
-          {/* Order Header */}
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div>
-              <h3 className="font-bold text-slate-800 text-base">Current Cart & Tickets</h3>
-              <p className="text-xs text-slate-500">
-                {currentOrder ? `${currentOrder.type} • ${currentOrder.tableNumber || 'Take Away'}` : 'No Order'}
-              </p>
-            </div>
-            {currentOrder && (
-              <Button
-                variant="outline"
-                size="sm"
-                icon={<Receipt className="w-3.5 h-3.5" />}
-                onClick={() => navigate(`/billing?orderId=${currentOrder.id}`)}
-              >
-                Go to Billing
-              </Button>
-            )}
-          </div>
+      {(() => {
+        const activeMiniOrders = currentOrder
+          ? currentOrder.miniOrders
+              .map((mo) => ({
+                ...mo,
+                items: mo.items.filter((i) => i.status !== 'Cancelled'),
+              }))
+              .filter((mo) => mo.items.length > 0)
+          : [];
 
-          {/* Section 1: Draft Items Pending Append */}
-          {draftItems.length > 0 && (
-            <div className="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200 space-y-3">
-              <div className="flex items-center justify-between text-xs font-bold text-amber-900">
-                <span>New Items (Draft)</span>
-                <div className="flex items-center gap-2">
-                  <span>{draftItems.reduce((s, i) => s + i.quantity, 0)} Items</span>
-                  <button
-                    onClick={handleClearDraft}
-                    className="flex items-center gap-1 text-[11px] font-semibold text-rose-700 bg-rose-100/70 hover:bg-rose-200 px-2 py-0.5 rounded-lg transition-colors"
-                    title="Clear Draft Cart"
+        const draftSubtotal = draftItems.reduce(
+          (sum, i) => sum + i.menuItem.price * i.quantity,
+          0
+        );
+
+        const activeOrderSubtotal = activeMiniOrders.reduce((sum, mo) => {
+          return sum + mo.items.reduce((s, i) => s + i.price * i.quantity, 0);
+        }, 0);
+
+        const effectiveSubtotal = activeOrderSubtotal + draftSubtotal;
+        const taxRate = 10;
+        const serviceRate = orderType === 'Dine-In' ? 5 : 0;
+        const effectiveTax = Math.round((effectiveSubtotal * taxRate) / 100);
+        const effectiveService = Math.round((effectiveSubtotal * serviceRate) / 100);
+        const effectiveGrandTotal = effectiveSubtotal + effectiveTax + effectiveService;
+
+        const handleProceedToBilling = () => {
+          let target = currentOrder;
+          if (!target) {
+            if (orderType === 'Dine-In') {
+              const freeTable = tables.find((t) => t.status === 'Free') || tables[0];
+              target = createOrder('Dine-In', freeTable?.id);
+              setSelectedOrderId(target.id);
+            } else {
+              target = createOrder('Take-Away');
+              setSelectedOrderId(target.id);
+            }
+          }
+          if (draftItems.length > 0 && target) {
+            addItemsToOrder(target.id, draftItems);
+            setDraftItems([]);
+          }
+          if (target) {
+            navigate(`/billing?orderId=${target.id}`);
+          }
+        };
+
+        const isEmpty = draftItems.length === 0 && activeMiniOrders.length === 0;
+
+        return (
+          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between overflow-hidden">
+            <div className="flex-1 overflow-y-auto space-y-4 pr-1">
+              {/* Order Header */}
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                  <h3 className="font-bold text-slate-800 text-base">Current Cart & Tickets</h3>
+                  <p className="text-xs text-slate-500">
+                    {currentOrder
+                      ? `${currentOrder.type} • ${currentOrder.tableNumber || 'Take Away'}`
+                      : 'No Active Order (Select Table or Dish)'}
+                  </p>
+                </div>
+                {effectiveSubtotal > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    icon={<Receipt className="w-3.5 h-3.5" />}
+                    onClick={handleProceedToBilling}
                   >
-                    <Trash2 className="w-3 h-3" />
-                    <span>Clear Cart</span>
-                  </button>
+                    Go to Billing
+                  </Button>
+                )}
+              </div>
+
+              {/* Empty Cart State */}
+              {isEmpty && (
+                <div className="flex flex-col items-center justify-center py-20 text-center text-slate-400 space-y-3">
+                  <div className="p-4 bg-slate-100 rounded-full text-slate-400">
+                    <ShoppingBag className="w-8 h-8" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-bold text-sm text-slate-700">Order Cart is Empty</p>
+                    <p className="text-xs text-slate-400 max-w-[220px]">
+                      Click any dish from the menu to add it to your order.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Section 1: Draft Items Pending Append */}
+              {draftItems.length > 0 && (
+                <div className="p-3.5 rounded-xl bg-blue-50/60 border border-blue-200 space-y-3">
+                  <div className="flex items-center justify-between text-xs font-bold text-slate-800">
+                    <span className="flex items-center gap-1.5 text-[#0B4EAE]">
+                      <span>Selected Dishes</span>
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-slate-500">{draftItems.reduce((s, i) => s + i.quantity, 0)} Items</span>
+                      <button
+                        onClick={handleClearDraft}
+                        className="flex items-center gap-1 text-[11px] font-semibold text-rose-700 bg-rose-100/70 hover:bg-rose-200 px-2 py-0.5 rounded-lg transition-colors"
+                        title="Clear Cart"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        <span>Clear</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    {draftItems.map((item) => (
+                      <div key={item.menuItem.id} className="p-2.5 rounded-xl bg-white border border-blue-100 space-y-1.5 shadow-2xs">
+                        <div className="flex items-center justify-between text-xs font-semibold text-slate-800">
+                          <span className="font-bold">{item.menuItem.name}</span>
+                          <span className="font-mono text-[#0B4EAE] font-bold">
+                            LKR {(item.menuItem.price * item.quantity).toLocaleString()}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between text-xs pt-1">
+                          <input
+                            type="text"
+                            placeholder="Add special note..."
+                            value={item.notes || ''}
+                            onChange={(e) => handleUpdateDraftNotes(item.menuItem.id, e.target.value)}
+                            className="text-[11px] bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 w-32 focus:outline-none focus:ring-1 focus:ring-[#0B4EAE]"
+                          />
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+                              <button
+                                onClick={() => handleUpdateDraftQty(item.menuItem.id, -1)}
+                                className="p-1 rounded bg-white hover:bg-slate-200 text-slate-700 shadow-2xs transition-colors"
+                              >
+                                <Minus className="w-3 h-3" />
+                              </button>
+                              <span className="font-bold w-5 text-center text-xs">{item.quantity}</span>
+                              <button
+                                onClick={() => handleUpdateDraftQty(item.menuItem.id, 1)}
+                                className="p-1 rounded bg-white hover:bg-slate-200 text-slate-700 shadow-2xs transition-colors"
+                              >
+                                <Plus className="w-3 h-3" />
+                              </button>
+                            </div>
+                            <button
+                              onClick={() => handleUpdateDraftQty(item.menuItem.id, -item.quantity)}
+                              className="p-1 text-slate-400 hover:text-rose-600 transition-colors"
+                              title="Remove item"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="w-full bg-[#0B4EAE] hover:bg-[#093D89] text-white"
+                      icon={<CheckCircle2 className="w-3.5 h-3.5" />}
+                      onClick={handleAppendMiniOrder}
+                    >
+                      Confirm Items & Send to Kitchen
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Section 2: Sent & Appended Mini Orders List */}
+              {activeMiniOrders.map((miniOrder) => (
+                <div key={miniOrder.id} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-800">{miniOrder.id} (Mini-Order #{miniOrder.miniOrderNumber})</span>
+                    <StatusBadge status={miniOrder.status} size="sm" />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    {miniOrder.items.map((item) => (
+                      <div key={item.id} className="flex items-center justify-between text-xs py-1 border-b border-slate-100 last:border-0">
+                        <div>
+                          <span className="font-semibold text-slate-800">
+                            {item.quantity}x {item.name}
+                          </span>
+                          {item.specialNotes && <p className="text-[10px] text-slate-500 italic">Note: {item.specialNotes}</p>}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-slate-700">
+                            LKR {(item.price * item.quantity).toLocaleString()}
+                          </span>
+
+                          <button
+                            onClick={() => currentOrder && cancelOrderItem(currentOrder.id, miniOrder.id, item.id)}
+                            className="p-1 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded transition-colors"
+                            title="Cancel Item"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {!miniOrder.isSentToKitchen && currentOrder && (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="w-full mt-2"
+                      icon={<Send className="w-3.5 h-3.5" />}
+                      onClick={() => sendMiniOrderToKitchen(currentOrder.id, miniOrder.id)}
+                    >
+                      Send to Kitchen (Print Ticket)
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Footer Summary & Proceed */}
+            <div className="pt-4 border-t border-slate-200 space-y-3">
+              <div className="space-y-1 text-xs text-slate-600">
+                <div className="flex justify-between">
+                  <span>Subtotal:</span>
+                  <span className="font-semibold text-slate-800">
+                    LKR {effectiveSubtotal.toLocaleString()}
+                  </span>
+                </div>
+                {effectiveSubtotal > 0 && (
+                  <>
+                    <div className="flex justify-between text-[11px] text-slate-500">
+                      <span>Est. Tax ({taxRate}%):</span>
+                      <span>LKR {effectiveTax.toLocaleString()}</span>
+                    </div>
+                    {serviceRate > 0 && (
+                      <div className="flex justify-between text-[11px] text-slate-500">
+                        <span>Est. Service Charge ({serviceRate}%):</span>
+                        <span>LKR {effectiveService.toLocaleString()}</span>
+                      </div>
+                    )}
+                  </>
+                )}
+                <div className="flex justify-between font-bold text-sm text-slate-800 pt-1 border-t border-slate-100">
+                  <span>Grand Total:</span>
+                  <span className="text-[#0B4EAE]">
+                    LKR {effectiveGrandTotal.toLocaleString()}
+                  </span>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                {draftItems.map((item) => (
-                  <div key={item.menuItem.id} className="p-2 rounded-lg bg-white border border-amber-100 space-y-1">
-                    <div className="flex items-center justify-between text-xs font-semibold text-slate-800">
-                      <span>{item.menuItem.name}</span>
-                      <span>LKR {(item.menuItem.price * item.quantity).toLocaleString()}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-xs pt-1">
-                      <input
-                        type="text"
-                        placeholder="Add special note..."
-                        value={item.notes || ''}
-                        onChange={(e) => handleUpdateDraftNotes(item.menuItem.id, e.target.value)}
-                        className="text-[11px] bg-slate-50 border border-slate-200 rounded px-2 py-0.5 w-32 focus:outline-none"
-                      />
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => handleUpdateDraftQty(item.menuItem.id, -1)}
-                          className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="font-bold w-4 text-center">{item.quantity}</span>
-                        <button
-                          onClick={() => handleUpdateDraftQty(item.menuItem.id, 1)}
-                          className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-amber-300 text-amber-900 hover:bg-amber-100"
-                  icon={<RotateCcw className="w-3.5 h-3.5" />}
-                  onClick={handleClearDraft}
-                >
-                  Clear
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  className="flex-1 bg-amber-600 hover:bg-amber-700 text-white"
-                  icon={<CheckCircle2 className="w-3.5 h-3.5" />}
-                  onClick={handleAppendMiniOrder}
-                >
-                  Confirm Items & Create Mini-Order
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* Section 2: Sent & Appended Mini Orders List */}
-          {currentOrder?.miniOrders.map((miniOrder) => (
-            <div key={miniOrder.id} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-slate-800">{miniOrder.id} (Mini-Order #{miniOrder.miniOrderNumber})</span>
-                <StatusBadge status={miniOrder.status} size="sm" />
-              </div>
-
-              <div className="space-y-1.5">
-                {miniOrder.items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between text-xs py-1 border-b border-slate-100 last:border-0">
-                    <div>
-                      <span className={`font-semibold ${item.status === 'Cancelled' ? 'line-through text-slate-400' : 'text-slate-800'}`}>
-                        {item.quantity}x {item.name}
-                      </span>
-                      {item.specialNotes && <p className="text-[10px] text-slate-500 italic">Note: {item.specialNotes}</p>}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`font-medium ${item.status === 'Cancelled' ? 'line-through text-slate-400' : 'text-slate-700'}`}>
-                        LKR {(item.price * item.quantity).toLocaleString()}
-                      </span>
-
-                      {item.status === 'Cancelled' ? (
-                        <StatusBadge status="Cancelled" size="sm" />
-                      ) : (
-                        <button
-                          onClick={() => cancelOrderItem(currentOrder.id, miniOrder.id, item.id)}
-                          className="p-1 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded transition-colors"
-                          title="Cancel Item"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {!miniOrder.isSentToKitchen && (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  className="w-full mt-2"
-                  icon={<Send className="w-3.5 h-3.5" />}
-                  onClick={() => sendMiniOrderToKitchen(currentOrder.id, miniOrder.id)}
-                >
-                  Send to Kitchen (Print Ticket)
-                </Button>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Footer Summary & Proceed */}
-        <div className="pt-4 border-t border-slate-200 space-y-3">
-          <div className="space-y-1 text-xs text-slate-600">
-            <div className="flex justify-between">
-              <span>Subtotal:</span>
-              <span className="font-semibold text-slate-800">
-                LKR {(currentOrder?.subtotal || 0).toLocaleString()}
-              </span>
-            </div>
-            <div className="flex justify-between font-bold text-sm text-slate-800 pt-1 border-t border-slate-100">
-              <span>Grand Total:</span>
-              <span className="text-[#0B4EAE]">
-                LKR {(currentOrder?.grandTotal || 0).toLocaleString()}
-              </span>
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-full bg-[#0B4EAE] hover:bg-[#093D89]"
+                disabled={effectiveSubtotal === 0}
+                onClick={handleProceedToBilling}
+              >
+                Proceed to Billing Checkout
+              </Button>
             </div>
           </div>
-
-          <Button
-            variant="primary"
-            size="lg"
-            className="w-full bg-[#0B4EAE] hover:bg-[#093D89]"
-            disabled={!currentOrder || currentOrder.miniOrders.length === 0}
-            onClick={() => currentOrder && navigate(`/billing?orderId=${currentOrder.id}`)}
-          >
-            Proceed to Billing Checkout
-          </Button>
-        </div>
-      </div>
+        );
+      })()}
     </div>
   );
 };

@@ -152,7 +152,7 @@ export const initialMenuItems: MenuItem[] = [
 export const initialTables: Table[] = [
   { id: 't-1', tableNumber: 'Table 01', capacity: 2, location: 'Main Dining', status: 'Free' },
   { id: 't-2', tableNumber: 'Table 02', capacity: 4, location: 'Main Dining', status: 'Free' },
-  { id: 't-3', tableNumber: 'Table 03', capacity: 4, location: 'Main Dining', status: 'Occupied', currentOrderId: 'ord-101', guestCount: 3 },
+  { id: 't-3', tableNumber: 'Table 03', capacity: 4, location: 'Main Dining', status: 'Free' },
   { id: 't-4', tableNumber: 'Table 04', capacity: 6, location: 'VIP Section', status: 'Reserved', guestCount: 5, reservationCustomerName: 'Dr. Kasun Wickrama', reservationCustomerPhone: '+94 77 888 9911', reservationDateTime: '2026-08-18T19:30' },
   { id: 't-5', tableNumber: 'Table 05', capacity: 2, location: 'Terrace', status: 'Free' },
   { id: 't-6', tableNumber: 'Table 06', capacity: 4, location: 'Terrace', status: 'Free' },
@@ -161,52 +161,6 @@ export const initialTables: Table[] = [
 ];
 
 export const initialOrders: Order[] = [
-  {
-    id: 'ord-101',
-    orderNumber: 'ORD-2026-0818-01',
-    type: 'Dine-In',
-    tableId: 't-3',
-    tableNumber: 'Table 03',
-    customerName: 'Mr. Perera',
-    customerPhone: '+94 77 123 4567',
-    createdAt: '2026-08-18T17:00:00.000Z',
-    updatedAt: '2026-08-18T17:20:00.000Z',
-    status: 'Active',
-    miniOrders: [
-      {
-        id: '#1001',
-        orderId: 'ord-101',
-        miniOrderNumber: 1,
-        createdAt: '2026-08-18T17:05:00.000Z',
-        isSentToKitchen: true,
-        status: 'Sent',
-        items: [
-          { id: 'item-1', menuItemId: 'm-2', name: 'Spicy Jumbo Prawn Curry', price: 3200, quantity: 2, status: 'Ready', sentToKitchenAt: '17:05' },
-          { id: 'item-2', menuItemId: 'm-4', name: 'Ocean Chef Mixed Seafood Fried Rice', price: 2400, quantity: 1, status: 'Ready', sentToKitchenAt: '17:05' },
-        ],
-      },
-      {
-        id: '#1002',
-        orderId: 'ord-101',
-        miniOrderNumber: 2,
-        createdAt: '2026-08-18T17:20:00.000Z',
-        isSentToKitchen: true,
-        status: 'Sent',
-        items: [
-          { id: 'item-3', menuItemId: 'm-10', name: 'Ocean Blue Lagoon Mocktail', price: 850, quantity: 3, status: 'Ready', sentToKitchenAt: '17:20' },
-        ],
-      },
-    ],
-    subtotal: 11350,
-    discountPercentage: 5,
-    discountAmount: 567.5,
-    taxPercentage: 10,
-    taxAmount: 1078.25,
-    serviceChargePercentage: 5,
-    serviceChargeAmount: 539.13,
-    grandTotal: 12400,
-    paymentStatus: 'Unpaid',
-  },
   {
     id: 'ord-100',
     orderNumber: 'ORD-2026-0818-00',

@@ -119,12 +119,33 @@ export const SystemStoreProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const [tables, setTables] = useState<Table[]>(() => {
     const saved = localStorage.getItem('oceanchef_tables');
-    return saved ? JSON.parse(saved) : initialTables;
+    if (saved) {
+      try {
+        const parsed: Table[] = JSON.parse(saved);
+        return parsed.map((t) => {
+          if (t.currentOrderId === 'ord-101' || (t.id === 't-3' && t.currentOrderId === 'ord-101')) {
+            return { ...t, status: 'Free' as const, currentOrderId: undefined, guestCount: undefined };
+          }
+          return t;
+        });
+      } catch {
+        return initialTables;
+      }
+    }
+    return initialTables;
   });
 
   const [orders, setOrders] = useState<Order[]>(() => {
     const saved = localStorage.getItem('oceanchef_orders');
-    return saved ? JSON.parse(saved) : initialOrders;
+    if (saved) {
+      try {
+        const parsed: Order[] = JSON.parse(saved);
+        return parsed.filter((o) => o.id !== 'ord-101');
+      } catch {
+        return initialOrders;
+      }
+    }
+    return initialOrders;
   });
 
   const [inventory, setInventory] = useState<InventoryItem[]>(() => {
